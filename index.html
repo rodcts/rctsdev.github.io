@@ -492,6 +492,9 @@
       }
 
       /* Typewriter Cursor */
+      .typing-cursor {
+        white-space: nowrap;
+      }
       .typing-cursor::after {
         content: "|";
         animation: blink 1s step-start infinite;
@@ -563,61 +566,6 @@
       #backToTop.show {
         opacity: 1;
         visibility: visible;
-      }
-
-      /* Glitch Effect Keyframes */
-      @keyframes glitch-1 {
-        0% {
-          clip-path: inset(20% 0 80% 0);
-          transform: translate(-2px, 1px);
-        }
-        20% {
-          clip-path: inset(60% 0 10% 0);
-          transform: translate(2px, -1px);
-        }
-        40% {
-          clip-path: inset(40% 0 50% 0);
-          transform: translate(-2px, 2px);
-        }
-        60% {
-          clip-path: inset(80% 0 5% 0);
-          transform: translate(2px, -2px);
-        }
-        80% {
-          clip-path: inset(10% 0 70% 0);
-          transform: translate(-1px, 1px);
-        }
-        100% {
-          clip-path: inset(30% 0 50% 0);
-          transform: translate(1px, -1px);
-        }
-      }
-
-      @keyframes glitch-2 {
-        0% {
-          clip-path: inset(10% 0 60% 0);
-          transform: translate(2px, -1px);
-        }
-        20% {
-          clip-path: inset(80% 0 5% 0);
-          transform: translate(-2px, 2px);
-        }
-        40% {
-          clip-path: inset(30% 0 20% 0);
-          transform: translate(2px, 1px);
-        }
-        60% {
-          clip-path: inset(10% 0 80% 0);
-          transform: translate(-1px, -2px);
-        }
-        80% {
-          clip-path: inset(50% 0 30% 0);
-          transform: translate(1px, 2px);
-        }
-        100% {
-          clip-path: inset(20% 0 70% 0);
-          transform: translate(-2px, 1px);
-        }
       }
 
       /* Terminal Section */
@@ -698,47 +646,6 @@
         font-size: 0.95rem;
         flex: 1;
         outline: none;
-      }
-
-      header h1::before,
-      header h1::after {
-        content: attr(data-text);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to right, #34d399, #38bdf8);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        opacity: 0.7;
-      }
-      header h1::before {
-        left: 2px;
-        text-shadow: -1px 0 #ff00c1;
-        animation: glitch-1 2s infinite linear alternate-reverse;
-        z-index: -1;
-      }
-      header h1::after {
-        left: -2px;
-        text-shadow: -1px 0 #00fff9;
-        animation: glitch-2 3s infinite linear alternate-reverse;
-        z-index: -2;
-      }
-
-      /* Cursor Spotlight Effect */
-      body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        z-index: 9998; /* Below progress bar, above everything else */
-        pointer-events: none;
-        background: radial-gradient(
-          circle at var(--mouse-x) var(--mouse-y),
-          transparent 120px,
-          rgba(2, 6, 23, 0.85) 350px
-        );
-        transition: background 0.2s ease-out;
       }
 
       /* Modal Styles */
@@ -843,9 +750,7 @@
       <div class="hero-bg"></div>
       <div class="container">
         <!-- REPLACE WITH YOUR NAME -->
-        <h1 data-text="RODRIGO CHAGAS TEIXEIRA DA SILVA">
-          RODRIGO CHAGAS TEIXEIRA DA SILVA
-        </h1>
+        <h1>RODRIGO CHAGAS TEIXEIRA DA SILVA</h1>
 
         <!-- REPLACE WITH YOUR JOB TITLE -->
         <p id="job-title" class="typing-cursor" style="min-height: 1.6em">
@@ -1067,6 +972,90 @@
         </div>
       </div>
     </section>
+
+    <!-- Skill Details Modal -->
+    <div id="skillModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeAllModals()">&times;</span>
+        <h3
+          id="modalTitle"
+          style="color: var(--primary-color); margin-top: 0"
+        ></h3>
+        <p id="modalDesc"></p>
+      </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeAllModals()">&times;</span>
+        <h3 style="color: var(--primary-color); margin-top: 0">
+          Entre em Contato
+        </h3>
+        <p>Envie uma mensagem para rctsdev@gmail.com</p>
+        <form
+          id="contactForm"
+          onsubmit="
+            event.preventDefault();
+            alert('Mensagem enviada (simulação)');
+            closeAllModals();
+          "
+        >
+          <div style="margin-bottom: 15px">
+            <input
+              type="text"
+              placeholder="Seu Nome"
+              style="
+                width: 100%;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid var(--border-color);
+                color: white;
+                border-radius: 5px;
+              "
+              required
+            />
+          </div>
+          <div style="margin-bottom: 15px">
+            <input
+              type="email"
+              placeholder="Seu Email"
+              style="
+                width: 100%;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid var(--border-color);
+                color: white;
+                border-radius: 5px;
+              "
+              required
+            />
+          </div>
+          <div style="margin-bottom: 15px">
+            <textarea
+              placeholder="Sua Mensagem"
+              rows="4"
+              style="
+                width: 100%;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid var(--border-color);
+                color: white;
+                border-radius: 5px;
+              "
+              required
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="btn"
+            style="width: 100%; border: none; cursor: pointer"
+          >
+            Enviar
+          </button>
+        </form>
+      </div>
+    </div>
 
     <!-- SKILLS SECTION -->
     <section id="skills" class="reveal">
@@ -1399,7 +1388,7 @@
             Credly
           </a>
           |
-          <a href="mailto:rctsdev@gmail.com" style="margin: 0 10px">
+          <a href="#" id="contactLink" style="margin: 0 10px">
             rctsdev@gmail.com
           </a>
         </p>
@@ -1694,7 +1683,122 @@
       document.addEventListener("DOMContentLoaded", () => {
         handleScrollAnimations();
         startTypewriter();
+        initParticles();
+        animateParticles();
+        updateCloud();
       });
+
+      // --- 3D TAG CLOUD LOGIC (Fixes Stacking Bug) ---
+      const skillsList = document.querySelector(".skills-list");
+      const skillTags = document.querySelectorAll(".skill-tag");
+      const radius = 220;
+      let velX = 0.002,
+        velY = 0.002;
+      let targetVelX = 0.002,
+        targetVelY = 0.002;
+      const tags = [];
+
+      if (skillTags.length > 0) {
+        const phi = Math.PI * (3 - Math.sqrt(5));
+        skillTags.forEach((tag, i) => {
+          const y = 1 - (i / Math.max(1, skillTags.length - 1)) * 2;
+          const radiusAtY = Math.sqrt(Math.max(0, 1 - y * y));
+          const theta = phi * i;
+          const x = Math.cos(theta) * radiusAtY;
+          const z = Math.sin(theta) * radiusAtY;
+          tags.push({
+            element: tag,
+            x: x * radius,
+            y: y * radius,
+            z: z * radius,
+          });
+
+          tag.addEventListener("click", () => {
+            document.getElementById("modalTitle").innerText = tag.innerText;
+            document.getElementById("modalDesc").innerText =
+              "Especialista em " +
+              tag.innerText +
+              " com foco em soluções escaláveis e automação.";
+            document.getElementById("skillModal").style.display = "block";
+          });
+        });
+      }
+
+      function updateCloud() {
+        velX += (targetVelX - velX) * 0.05;
+        velY += (targetVelY - velY) * 0.05;
+        tags.forEach((tag) => {
+          const cosX = Math.cos(velY),
+            sinX = Math.sin(velY);
+          const cosY = Math.cos(velX),
+            sinY = Math.sin(velX);
+          let x1 = tag.x * cosY - tag.z * sinY;
+          let z1 = tag.x * sinY + tag.z * cosY;
+          let y2 = tag.y * cosX - z1 * sinX;
+          let z2 = tag.y * sinX + z1 * cosX;
+          tag.x = x1;
+          tag.y = y2;
+          tag.z = z2;
+          const scale = radius / (radius - z2 + radius);
+          const alpha = (z2 + radius) / (2 * radius);
+          tag.element.style.transform = `translate(-50%, -50%) translate3d(${x1}px, ${y2}px, 0) scale(${scale})`;
+          tag.element.style.opacity = 0.3 + 0.7 * alpha;
+          tag.element.style.filter = `blur(${(1 - alpha) * 2}px)`;
+          tag.element.style.zIndex = Math.floor(alpha * 100);
+        });
+        requestAnimationFrame(updateCloud);
+      }
+
+      skillsList.addEventListener("mousemove", (e) => {
+        const rect = skillsList.getBoundingClientRect();
+        targetVelX = (e.clientX - rect.left - rect.width / 2) * 0.0001;
+        targetVelY = (e.clientY - rect.top - rect.height / 2) * 0.0001;
+      });
+
+      // --- PARTICLES SYSTEM ---
+      const canvas = document.getElementById("particles-canvas");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      function initParticles() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = Array.from({ length: 80 }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 0.5,
+          vx: Math.random() * 0.5 - 0.25,
+          vy: Math.random() * 0.5 - 0.25,
+          o: Math.random() * 0.5 + 0.1,
+        }));
+      }
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+          ctx.fillStyle = `rgba(16, 185, 129, ${p.o})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        requestAnimationFrame(animateParticles);
+      }
+
+      function closeAllModals() {
+        document.getElementById("skillModal").style.display = "none";
+        document.getElementById("contactModal").style.display = "none";
+      }
+
+      document.getElementById("contactLink").addEventListener("click", (e) => {
+        e.preventDefault();
+        document.getElementById("contactModal").style.display = "block";
+      });
+
+      window.onclick = (e) => {
+        if (e.target.className === "modal") closeAllModals();
+      };
 
       // 3D Tilt Effect for Project Cards
       const cards = document.querySelectorAll(".project-card");
