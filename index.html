@@ -28,6 +28,23 @@
           0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         --glow: 0 0 25px rgba(16, 185, 129, 0.2);
         --radius: 0.75rem;
+        --gradient-start: #34d399;
+        --gradient-end: #38bdf8;
+        --border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      /* Light Mode Overrides */
+      body.light-mode {
+        --dark-bg: #f0f9ff;
+        --darker-bg: #e2e8f0;
+        --light-bg: #ffffff;
+        --card-bg: rgba(255, 255, 255, 0.65);
+        --text-color: #334155;
+        --heading-color: #0f172a;
+        --white: #0f172a;
+        --gradient-start: #059669;
+        --gradient-end: #0284c7;
+        --border-color: rgba(0, 0, 0, 0.1);
       }
 
       body {
@@ -90,12 +107,18 @@
       header h1 {
         font-size: 3.5rem;
         margin-bottom: 1rem;
-        background: linear-gradient(to right, #34d399, #38bdf8);
+        background: linear-gradient(
+          to right,
+          var(--gradient-start),
+          var(--gradient-end)
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 800;
         letter-spacing: -0.025em;
         text-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+        position: relative;
+        z-index: 1;
       }
 
       header p {
@@ -155,6 +178,7 @@
       section {
         padding: 80px 0;
         position: relative; /* For Parallax context */
+        z-index: 1; /* Ensure content is above particles */
       }
 
       h2 {
@@ -181,7 +205,7 @@
         overflow: hidden;
         box-shadow: var(--shadow-sm);
         transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         transform-style: preserve-3d; /* Enable 3D space */
         perspective: 1000px;
       }
@@ -213,7 +237,7 @@
       .project-details {
         display: none; /* Hidden by default */
         margin-top: 15px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid var(--border-color);
         padding-top: 15px;
       }
 
@@ -226,29 +250,42 @@
 
       /* Skills Section */
       .skills-list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
+        position: relative;
+        height: 450px;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        perspective: 1000px;
       }
 
       .skill-tag {
         background: var(--card-bg);
         padding: 10px 20px;
         border-radius: 50px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         font-weight: 500;
         color: var(--text-color);
         box-shadow: var(--shadow-sm);
-        transition: all 0.2s;
+        transition:
+          border-color 0.3s,
+          background 0.3s,
+          box-shadow 0.3s,
+          color 0.3s;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        will-change: transform, opacity, filter;
+        cursor: pointer;
+        white-space: nowrap;
       }
 
       .skill-tag:hover {
         border-color: var(--primary-color);
         color: var(--primary-color);
-        transform: translateY(-2px);
         background: rgba(16, 185, 129, 0.1);
         box-shadow: var(--glow);
+        z-index: 1000;
       }
 
       /* Footer */
@@ -279,7 +316,7 @@
         padding: 25px;
         border-radius: var(--radius);
         box-shadow: var(--shadow-sm);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         border-left: 4px solid var(--primary-color);
       }
 
@@ -358,7 +395,7 @@
         padding: 30px 20px;
         border-radius: var(--radius);
         box-shadow: var(--shadow-md);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         width: 100%;
         height: 100%;
         transition: transform 0.3s ease;
@@ -415,7 +452,7 @@
         position: static;
         transform: none;
         background: rgba(30, 41, 59, 0.8);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -468,6 +505,31 @@
         }
       }
 
+      /* Theme Toggle Button */
+      #themeToggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10001;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+      }
+      #themeToggle:hover {
+        transform: scale(1.1);
+        box-shadow: var(--glow);
+      }
+
       /* Back to Top Button */
       #backToTop {
         position: fixed;
@@ -479,7 +541,7 @@
         transition: all 0.3s ease;
         background: var(--card-bg);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         color: var(--primary-color);
         width: 50px;
         height: 50px;
@@ -502,6 +564,269 @@
         opacity: 1;
         visibility: visible;
       }
+
+      /* Glitch Effect Keyframes */
+      @keyframes glitch-1 {
+        0% {
+          clip-path: inset(20% 0 80% 0);
+          transform: translate(-2px, 1px);
+        }
+        20% {
+          clip-path: inset(60% 0 10% 0);
+          transform: translate(2px, -1px);
+        }
+        40% {
+          clip-path: inset(40% 0 50% 0);
+          transform: translate(-2px, 2px);
+        }
+        60% {
+          clip-path: inset(80% 0 5% 0);
+          transform: translate(2px, -2px);
+        }
+        80% {
+          clip-path: inset(10% 0 70% 0);
+          transform: translate(-1px, 1px);
+        }
+        100% {
+          clip-path: inset(30% 0 50% 0);
+          transform: translate(1px, -1px);
+        }
+      }
+
+      @keyframes glitch-2 {
+        0% {
+          clip-path: inset(10% 0 60% 0);
+          transform: translate(2px, -1px);
+        }
+        20% {
+          clip-path: inset(80% 0 5% 0);
+          transform: translate(-2px, 2px);
+        }
+        40% {
+          clip-path: inset(30% 0 20% 0);
+          transform: translate(2px, 1px);
+        }
+        60% {
+          clip-path: inset(10% 0 80% 0);
+          transform: translate(-1px, -2px);
+        }
+        80% {
+          clip-path: inset(50% 0 30% 0);
+          transform: translate(1px, 2px);
+        }
+        100% {
+          clip-path: inset(20% 0 70% 0);
+          transform: translate(-2px, 1px);
+        }
+      }
+
+      /* Terminal Section */
+      .terminal-window {
+        background: #1e1e1e;
+        border-radius: 8px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        font-family: "Courier New", Courier, monospace;
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .terminal-header {
+        background: #2d2d2d;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #333;
+      }
+
+      .terminal-btn {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .terminal-btn.red {
+        background: #ff5f56;
+      }
+      .terminal-btn.yellow {
+        background: #ffbd2e;
+      }
+      .terminal-btn.green {
+        background: #27c93f;
+      }
+
+      .terminal-title {
+        margin-left: 10px;
+        color: #999;
+        font-size: 0.8rem;
+      }
+
+      .terminal-body {
+        padding: 20px;
+        color: #d4d4d4;
+        font-size: 0.95rem;
+        height: 300px;
+        overflow-y: auto;
+      }
+
+      .terminal-line {
+        margin-bottom: 5px;
+      }
+
+      .cmd {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+
+      .terminal-input-line {
+        display: flex;
+        padding: 0 20px 20px;
+        align-items: center;
+      }
+
+      .prompt {
+        color: var(--primary-color);
+        margin-right: 10px;
+      }
+
+      #terminalInput {
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.95rem;
+        flex: 1;
+        outline: none;
+      }
+
+      header h1::before,
+      header h1::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, #34d399, #38bdf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        opacity: 0.7;
+      }
+      header h1::before {
+        left: 2px;
+        text-shadow: -1px 0 #ff00c1;
+        animation: glitch-1 2s infinite linear alternate-reverse;
+        z-index: -1;
+      }
+      header h1::after {
+        left: -2px;
+        text-shadow: -1px 0 #00fff9;
+        animation: glitch-2 3s infinite linear alternate-reverse;
+        z-index: -2;
+      }
+
+      /* Cursor Spotlight Effect */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 9998; /* Below progress bar, above everything else */
+        pointer-events: none;
+        background: radial-gradient(
+          circle at var(--mouse-x) var(--mouse-y),
+          transparent 120px,
+          rgba(2, 6, 23, 0.85) 350px
+        );
+        transition: background 0.2s ease-out;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+      }
+      .modal-content {
+        background-color: var(--light-bg);
+        margin: 15% auto;
+        padding: 30px;
+        border: 1px solid var(--primary-color);
+        width: 80%;
+        max-width: 600px;
+        border-radius: var(--radius);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        position: relative;
+        color: var(--text-color);
+      }
+      .close-modal {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close-modal:hover,
+      .close-modal:focus {
+        color: var(--primary-color);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* Languages Section */
+      .languages-container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .language-item {
+        margin-bottom: 25px;
+      }
+      .lang-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--heading-color);
+      }
+      .lang-level {
+        color: var(--primary-color);
+        font-size: 0.9rem;
+      }
+      .progress-bg {
+        background: rgba(255, 255, 255, 0.1);
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border-radius: 5px;
+        width: 0;
+        transition: width 1.5s ease-out;
+        box-shadow: 0 0 10px var(--glow);
+      }
+
+      #particles-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body>
@@ -510,12 +835,17 @@
       <div class="progress-bar" id="myBar"></div>
     </div>
 
+    <!-- Particles Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
     <!-- HERO SECTION -->
     <header>
       <div class="hero-bg"></div>
       <div class="container">
         <!-- REPLACE WITH YOUR NAME -->
-        <h1>RODRIGO CHAGAS TEIXEIRA DA SILVA</h1>
+        <h1 data-text="RODRIGO CHAGAS TEIXEIRA DA SILVA">
+          RODRIGO CHAGAS TEIXEIRA DA SILVA
+        </h1>
 
         <!-- REPLACE WITH YOUR JOB TITLE -->
         <p id="job-title" class="typing-cursor" style="min-height: 1.6em">
@@ -763,6 +1093,33 @@
       </div>
     </section>
 
+    <!-- LANGUAGES SECTION -->
+    <section id="languages" class="reveal">
+      <div class="container">
+        <h2 class="parallax-element" data-speed="0.1">Idiomas</h2>
+        <div class="languages-container">
+          <div class="language-item">
+            <div class="lang-header">
+              <span>Português</span>
+              <span class="lang-level">Nativo</span>
+            </div>
+            <div class="progress-bg">
+              <div class="progress-bar-fill" data-width="100%"></div>
+            </div>
+          </div>
+          <div class="language-item">
+            <div class="lang-header">
+              <span>Inglês</span>
+              <span class="lang-level">Intermediário</span>
+            </div>
+            <div class="progress-bg">
+              <div class="progress-bar-fill" data-width="60%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- EDUCATION & CERTIFICATIONS SECTION -->
     <section id="education" class="reveal">
       <div class="container">
@@ -964,6 +1321,51 @@
       </div>
     </section>
 
+    <!-- Skill Details Modal -->
+    <div id="skillModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3
+          id="modalTitle"
+          style="color: var(--primary-color); margin-top: 0"
+        ></h3>
+        <p id="modalDesc"></p>
+      </div>
+    </div>
+
+    <!-- TERMINAL SECTION -->
+    <section id="terminal" class="reveal">
+      <div class="container">
+        <h2 class="parallax-element" data-speed="0.1">Terminal Interativo</h2>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-btn red"></div>
+            <div class="terminal-btn yellow"></div>
+            <div class="terminal-btn green"></div>
+            <span class="terminal-title">visitor@rctsdev: ~</span>
+          </div>
+          <div class="terminal-body" id="terminalOutput">
+            <div class="terminal-line">
+              Bem-vindo ao terminal interativo v1.0.0
+            </div>
+            <div class="terminal-line">
+              Digite <span class="cmd">help</span> para ver a lista de comandos.
+            </div>
+            <br />
+          </div>
+          <div class="terminal-input-line">
+            <span class="prompt">visitor@rctsdev:~$</span>
+            <input
+              type="text"
+              id="terminalInput"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FOOTER -->
     <footer>
       <div class="container">
@@ -1007,6 +1409,9 @@
         </p>
       </div>
     </footer>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" onclick="toggleTheme()"></button>
 
     <!-- Back to Top Button -->
     <button id="backToTop" onclick="scrollToTop()">
@@ -1141,6 +1546,34 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
+      // Theme Toggle Logic
+      function toggleTheme() {
+        document.body.classList.toggle("light-mode");
+        const isLight = document.body.classList.contains("light-mode");
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+        updateThemeIcon(isLight);
+      }
+
+      function updateThemeIcon(isLight) {
+        const btn = document.getElementById("themeToggle");
+        if (isLight) {
+          // Moon icon for switching to dark
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>`;
+        } else {
+          // Sun icon for switching to light
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>`;
+        }
+      }
+
+      // Initialize Theme
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light") {
+        document.body.classList.add("light-mode");
+        updateThemeIcon(true);
+      } else {
+        updateThemeIcon(false);
+      }
+
       // --- MASTER SCROLL HANDLER ---
       // This single function handles all scroll-based animations for performance.
       function handleScrollAnimations() {
@@ -1188,6 +1621,15 @@
           }
         });
 
+        // 6. Animate Language Bars
+        const bars = document.querySelectorAll(".progress-bar-fill");
+        bars.forEach((bar) => {
+          const rect = bar.getBoundingClientRect();
+          if (rect.top < windowHeight - 50) {
+            bar.style.width = bar.getAttribute("data-width");
+          }
+        });
+
         // 5. Back to Top Button
         const backToTopBtn = document.getElementById("backToTop");
         if (scrollPosition > 300) {
@@ -1195,6 +1637,56 @@
         } else {
           backToTopBtn.classList.remove("show");
         }
+      }
+
+      // Terminal Logic
+      const terminalInput = document.getElementById("terminalInput");
+      const terminalOutput = document.getElementById("terminalOutput");
+      const terminalBody = document.querySelector(".terminal-body");
+
+      const commands = {
+        help: "Comandos disponíveis: <span class='cmd'>about</span>, <span class='cmd'>skills</span>, <span class='cmd'>projects</span>, <span class='cmd'>contact</span>, <span class='cmd'>clear</span>",
+        about:
+          "DevOps com sólida trajetória na IBM, focado em automação e eficiência.",
+        skills: "AWS, Python, Docker, Kubernetes, Terraform, CI/CD, DevSecOps.",
+        projects:
+          "Confira a seção 'Meus Projetos' acima para ver automações na Petrobras e apps na Oi.",
+        contact: "Email: rctsdev@gmail.com | LinkedIn: linkedin.com/in/rctsdev",
+      };
+
+      if (terminalInput) {
+        terminalInput.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            const input = this.value.trim().toLowerCase();
+
+            // Add input line to history
+            const inputLine = document.createElement("div");
+            inputLine.className = "terminal-line";
+            inputLine.innerHTML = `<span class="prompt">visitor@rctsdev:~$</span> ${this.value}`;
+            terminalOutput.appendChild(inputLine);
+
+            // Process command
+            if (input === "clear") {
+              terminalOutput.innerHTML = "";
+            } else if (commands[input]) {
+              const outputLine = document.createElement("div");
+              outputLine.className = "terminal-line";
+              outputLine.innerHTML = commands[input];
+              terminalOutput.appendChild(outputLine);
+            } else if (input !== "") {
+              const errorLine = document.createElement("div");
+              errorLine.className = "terminal-line";
+              errorLine.innerHTML = `Comando não encontrado: ${input}. Digite <span class="cmd">help</span>.`;
+              terminalOutput.appendChild(errorLine);
+            }
+
+            // Scroll to bottom
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+
+            // Clear input
+            this.value = "";
+          }
+        });
       }
 
       window.addEventListener("scroll", handleScrollAnimations);
