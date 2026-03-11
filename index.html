@@ -1016,6 +1016,7 @@
                 color: white;
                 border-radius: 5px;
               "
+              minlength="2"
               required
             />
           </div>
@@ -1032,6 +1033,7 @@
                 color: white;
                 border-radius: 5px;
               "
+              minlength="5"
               required
             />
           </div>
@@ -1832,6 +1834,16 @@
           submitBtn.disabled = true;
 
           const formData = new FormData(event.target);
+          const name = formData.get("name")?.trim();
+          const email = formData.get("email")?.trim();
+
+          if (!name || !email) {
+            alert("Por favor, preencha o seu nome e um e-mail válido.");
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
+            return;
+          }
+
           const params = new URLSearchParams(formData);
 
           // Insira aqui a URL copiada do Google Apps Script
