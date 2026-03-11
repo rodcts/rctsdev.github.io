@@ -992,18 +992,21 @@
         <h3 style="color: var(--primary-color); margin-top: 0">
           Entre em Contato
         </h3>
-        <p>Envie uma mensagem para rctsdev@gmail.com</p>
-        <form
-          id="contactForm"
-          onsubmit="
-            event.preventDefault();
-            alert('Mensagem enviada (simulação)');
-            closeAllModals();
-          "
-        >
+        <p id="contactStatus">Envie uma mensagem para rctsdev@gmail.com</p>
+        <form id="contactForm">
+          <!-- Campo Honeypot para segurança extra contra spam -->
+          <input
+            type="text"
+            name="_honeypot"
+            style="display: none"
+            tabindex="-1"
+            autocomplete="off"
+          />
+
           <div style="margin-bottom: 15px">
             <input
               type="text"
+              name="name"
               placeholder="Seu Nome"
               style="
                 width: 100%;
@@ -1019,6 +1022,7 @@
           <div style="margin-bottom: 15px">
             <input
               type="email"
+              name="email"
               placeholder="Seu Email"
               style="
                 width: 100%;
@@ -1034,6 +1038,7 @@
           <div style="margin-bottom: 15px">
             <textarea
               placeholder="Sua Mensagem"
+              name="message"
               rows="4"
               style="
                 width: 100%;
@@ -1049,7 +1054,14 @@
           <button
             type="submit"
             class="btn"
-            style="width: 100%; border: none; cursor: pointer"
+            style="
+              width: 100%;
+              border: none;
+              cursor: pointer;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
           >
             Enviar
           </button>
@@ -1799,6 +1811,53 @@
       window.onclick = (e) => {
         if (e.target.className === "modal") closeAllModals();
       };
+
+      // Lógica de envio do formulário de contato
+      const contactForm = document.getElementById("contactForm");
+      if (contactForm) {
+        contactForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const submitBtn = event.target.querySelector('button[type="submit"]');
+          const originalBtnText = submitBtn.innerText;
+
+          // Honeypot check (Segurança extra contra spam)
+          const honeypot = event.target.querySelector(
+            'input[name="_honeypot"]',
+          ).value;
+          if (honeypot) return;
+
+          // Feedback visual
+          submitBtn.innerText = "Enviando...";
+          submitBtn.disabled = true;
+
+          const formData = new FormData(event.target);
+          const params = new URLSearchParams(formData);
+
+          // Insira aqui a URL copiada do Google Apps Script
+          const GOOGLE_SCRIPT_URL =
+            "https://script.google.com/macros/s/AKfycbz4LG4Qeo6k62pVUyBJCp_SNIBhVJgNQ0CbXPqAjDLB7_nfE1ZywekN7zwFrw5lOVhH/exec";
+
+          fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            body: params,
+            mode: "no-cors", // Necessário para evitar bloqueios de CORS com o Google Apps Script
+          })
+            .then(() => {
+              alert("Obrigado! Sua mensagem foi enviada com sucesso.");
+              contactForm.reset();
+              closeAllModals();
+            })
+            .catch((error) => {
+              console.error("Erro no envio:", error);
+              alert("Houve um erro ao enviar. Tente novamente mais tarde.");
+            })
+            .finally(() => {
+              submitBtn.innerText = originalBtnText;
+              submitBtn.disabled = false;
+            });
+        });
+      }
 
       // 3D Tilt Effect for Project Cards
       const cards = document.querySelectorAll(".project-card");
